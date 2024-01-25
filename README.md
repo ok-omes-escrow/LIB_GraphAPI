@@ -25,15 +25,17 @@ Dependencies used:
 ### Details:
   - This reusable activity uses the Microsoft Graph API to create a new folder in SharePoint.
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strSharepointURL- This will hold the share point URL.
-in_strSharepointNewFolderName - Name of the new folder being created.
-in_strSharepointParentFolderPath - Folder path from root level.
-in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
-out_boolFolderCreated - boolean to check if folder was created.
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used). 
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strSharepointURL- This will hold the share point URL.
+<br/>in_strSharepointNewFolderName - Name of the new folder being created.
+<br/>in_strSharepointParentFolderPath - Folder path from root level.
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
+<br/>out_boolFolderCreated - boolean to check if folder was created.
+
+- Table Content : 
 
     | Command | Description |
     | --- | --- |
@@ -42,7 +44,7 @@ out_boolFolderCreated - boolean to check if folder was created.
     | Input/Output | NA |
     | Requirements | NA |
     | App Version | NA |
-
+ 
 - [Back to menu](#features)
 
 
@@ -51,19 +53,20 @@ out_boolFolderCreated - boolean to check if folder was created.
 ### Details:
   - This reusable activity uses the Microsoft Graph API to Download file from SharePoint.
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strParentDriveItemOptional- Drive item variable for upload file(optional).
-in_strSpParentFolderPath - Folder path from root level.
-in_strShareppointURL- This will holds the share point URL.
-in_strLocalFilepath - This will holds the local full file path.
-in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
-in_strDelay: Delay in "hh:mm:ss" format (example = "00:01:00").
-out_boolFileDownloaded- This will result the status of download file.
-out_strDownloadedFilepath- This will results the Downloaded file path.
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strParentDriveItemOptional- Drive item variable for upload file(optional).
+<br/>in_strSpParentFolderPath - Folder path from root level.
+<br/>in_strShareppointURL- This will holds the share point URL.
+<br/>in_strLocalFilepath - This will holds the local full file path.
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
+<br/>in_strDelay: Delay in "hh:mm:ss" format (example = "00:01:00").
+<br/>out_boolFileDownloaded- This will result the status of download file.
+<br/>out_strDownloadedFilepath- This will results the Downloaded file path.
 
+- Table Content : 
     | Command | Description |
     | --- | --- |
     | Input | in_strTenantIDAssetName : string; in_strApplicationIDAssetName  : string;  in_strApplicationSecretAssetName : string; in_strDelay : string; in_strOrchestratorFolderPath : string; in_strLocalFilepath : string; in_strShareppointURL : string; in_strSpParentFolderPath : string; in_ strParentDriveItemOptional : string; |
