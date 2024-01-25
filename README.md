@@ -66,7 +66,8 @@ Dependencies used:
 <br/>out_boolFileDownloaded- This will result the status of download file.
 <br/>out_strDownloadedFilepath- This will results the Downloaded file path.
 
-- Table Content : 
+- Table Content: 
+
     | Command | Description |
     | --- | --- |
     | Input | in_strTenantIDAssetName : string; in_strApplicationIDAssetName  : string;  in_strApplicationSecretAssetName : string; in_strDelay : string; in_strOrchestratorFolderPath : string; in_strLocalFilepath : string; in_strShareppointURL : string; in_strSpParentFolderPath : string; in_ strParentDriveItemOptional : string; |
@@ -84,16 +85,18 @@ Dependencies used:
 ### Details:
 - This reusable activity uses the Microsoft Graph to retrieve the Files and Folders in a specified SharePoint site.
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strSharepointURL - URL for SharePoint site.
-in_strSharepointSubfolder - sub folder path to search the file or folder.
-in_strSharepointFileFolderToSearch - Name of the file or folder to search.
-in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
-out_boolResultFileFolderFound - Boolean to denote if the file or folder was found.
-out_intResultCount - The number of results found.
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strSharepointURL - URL for SharePoint site.
+<br/>in_strSharepointSubfolder - sub folder path to search the file or folder.
+<br/>in_strSharepointFileFolderToSearch - Name of the file or folder to search.
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
+<br/>out_boolResultFileFolderFound - Boolean to denote if the file or folder was found.
+<br/>out_intResultCount - The number of results found.
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
@@ -112,16 +115,18 @@ out_intResultCount - The number of results found.
 ### Details:
 This activity uses the Microsoft Graph API to retrieve the Files and Folders in a specified SharePoint site.
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strSharepointURL - URL for SharePoint site.
-in_strSharepointSubfolder - sub folder path to search the file or folder.
-in_strSharepointFileFolderToSearch - Name of the file or folder to search.
-in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
-out_boolResultFileFolderFound - Boolean to denote if the file or folder was found.
-out_diResultDriveItems - List of Drive Items.
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strSharepointURL - URL for SharePoint site.
+<br/>in_strSharepointSubfolder - sub folder path to search the file or folder.
+<br/>in_strSharepointFileFolderToSearch - Name of the file or folder to search.
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
+<br/>out_boolResultFileFolderFound - Boolean to denote if the file or folder was found.
+<br/>out_diResultDriveItems - List of Drive Items.
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
@@ -141,16 +146,18 @@ out_diResultDriveItems - List of Drive Items.
 -This activity Uses the Microsoft Graph API to get the list item field value from SharePoint site.
 
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strSharepointURL- URL of the process SharePoint site.
-in_FilterCondition-Filter condition to filter the list items and get the column value.
-in_strSharepointListName- Name of the SharePoint list in the site.
-in_ColumnDisplayName- Display name of the column to retrieve from the SharePoint list
-in_strOrchestratorFolderPath: Orchestrator folder path to connect. 
-out_FieldValue - Extracted value from the respective column.
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strSharepointURL- URL of the process SharePoint site.
+<br/>in_FilterCondition-Filter condition to filter the list items and get the column value.
+<br/>in_strSharepointListName- Name of the SharePoint list in the site.
+<br/>in_ColumnDisplayName- Display name of the column to retrieve from the SharePoint list
+<br/>in_strOrchestratorFolderPath: Orchestrator folder path to connect. 
+<br/>out_FieldValue - Extracted value from the respective column.
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
@@ -171,20 +178,22 @@ out_FieldValue - Extracted value from the respective column.
 ### Details:
 - This workflow Uses the Microsoft Graph Get message and List messages APIs to retrieve the matching messages from a specified mailbox (in_MailAccount).
 
-After performing the search, the activity returns an array of the matching Office365Message objects (Result_Email_List) that you can use as input variables in subsequent activities (e.g., Forward Mail and Move Mail).
-The output will be a list of O365MailMessages.
+<br/>After performing the search, the activity returns an array of the matching Office365Message objects (Result_Email_List) that you can use as input variables in subsequent activities (e.g., Forward Mail and Move Mail).
+<br/>The output will be a list of O365MailMessages.
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strEmailAccount - The email address, with which to interact.
-in_strEmailFolder-  The mail folder, from which the messages are to be retrieved.
-in_intEmailRetrievalCount- The maximum number of mails that are to be retrieved. It is mandatory to provide a mail count.
-in_strEmailFilter- Query used for filtering the returned emails. If the query is not completed, all emails are returned. 
-in_boolMarkEmailAsRead-  If True, the returned messages are marked as read.
-out_listResultEmail - Returns all emails from the user's inbox. This field supports only Office365Message[] variables. 
-in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strEmailAccount - The email address, with which to interact.
+<br/>in_strEmailFolder-  The mail folder, from which the messages are to be retrieved.
+<br/>in_intEmailRetrievalCount- The maximum number of mails that are to be retrieved. It is mandatory to provide a mail count.
+<br/>in_strEmailFilter- Query used for filtering the returned emails. If the query is not completed, all emails are returned. 
+<br/>in_boolMarkEmailAsRead-  If True, the returned messages are marked as read.
+<br/>out_listResultEmail - Returns all emails from the user's inbox. This field supports only Office365Message[] variables. 
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
@@ -203,17 +212,19 @@ in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path
 ### Details:
 - This workflow uses the Microsoft Graph Create message and Send mail APIs to send a message (Body and Subject) to one or more recipients (To, CC, and BCC). This activity also gives you the option to include one or more attachments (Attachments) with your message.
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strMailBody - The body of the mail, that is to be sent. ( In HTML format)
-in_strMailSubject - The mail subject of the mail that is to be sent.
-in_strMailAccount- The mail account that is being used to send the mail. 
-in_strMailRecipientCC - String array of the recipients to which the mail is to be CC'ed. ( A comma-separated list of email addresses that you want to be included as Cc recipients.)
-in_strMailRecipientTo - String array of the recipients to which the mail has to be sent. ( A comma-separated list of email addresses that you want to send your mail to. )
-in_strListOfAttachments - List of files that are to be attached with the mail.
-in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strMailBody - The body of the mail, that is to be sent. ( In HTML format)
+<br/>in_strMailSubject - The mail subject of the mail that is to be sent.
+<br/>in_strMailAccount- The mail account that is being used to send the mail. 
+<br/>in_strMailRecipientCC - String array of the recipients to which the mail is to be CC'ed. ( A comma-separated list of email addresses that you want to be included as Cc recipients.)
+<br/>in_strMailRecipientTo - String array of the recipients to which the mail has to be sent. ( A comma-separated list of email addresses that you want to send your mail to. )
+<br/>in_strListOfAttachments - List of files that are to be attached with the mail.
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
@@ -233,16 +244,18 @@ in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path
 -This activity uses the Microsoft Graph API to update the list item in a specified SharePoint site.
 
 
-List of arguments used:
-in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_strApplicationIDAssetName- Name of the asset containing the Application ID.
-in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strSharepointURL- URL of the process sharepoint site
-in_FilterCondition-Filter condition to filter the list items and get the column value
-in_strSharepointListName- Name of the sharepoint list in the site
-in_ColumnDisplayName- Display name of the column to retrive from the sharepoint list
- in_ValueToBeUpdated - New value to be updated against the defined column name
-in_ strOrchestratorFolderPath – orchestrator folder path to connect
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strSharepointURL- URL of the process sharepoint site
+<br/>in_FilterCondition-Filter condition to filter the list items and get the column value
+<br/>in_strSharepointListName- Name of the sharepoint list in the site
+<br/>in_ColumnDisplayName- Display name of the column to retrive from the sharepoint list
+<br/> in_ValueToBeUpdated - New value to be updated against the defined column name
+<br/>in_ strOrchestratorFolderPath – orchestrator folder path to connect
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
@@ -261,15 +274,17 @@ in_ strOrchestratorFolderPath – orchestrator folder path to connect
 ### Details:
 -This activity uses the Microsoft Graph API to upload file in SharePoint
 
-List of arguments used:
-in_ApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
-in_ApplicationIDAssetName- Name of the asset containing the Application ID.
-in_TenantIDAssetName- Name of the asset containing the Tenant ID.
-in_strParentDriveItemOptional- Drive item variable for upload file(optional).
-in_strSharepointParentFolderPath - Folder path from root level.
-in_strSharepointUploadFilePath - directory path of the file to be uploaded.
-in_strSharepointURL - URL of the sharepoint site.
-out_boolFileUploaded - Boolean if the file has been uploaded.
+<br/>List of arguments used:
+<br/>in_ApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_ApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_TenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strParentDriveItemOptional- Drive item variable for upload file(optional).
+<br/>in_strSharepointParentFolderPath - Folder path from root level.
+<br/>in_strSharepointUploadFilePath - directory path of the file to be uploaded.
+<br/>in_strSharepointURL - URL of the sharepoint site.
+<br/>out_boolFileUploaded - Boolean if the file has been uploaded.
+
+- Table Content: 
 
     | Command | Description |
     | --- | --- |
