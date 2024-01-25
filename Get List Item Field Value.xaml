@@ -1,0 +1,246 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Get_List_Item_Field_Value" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ss="clr-namespace:System.Security;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uma="clr-namespace:UiPath.MicrosoftOffice365.Activities;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umac="clr-namespace:UiPath.MicrosoftOffice365.Activities.Contracts;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umas="clr-namespace:UiPath.MicrosoftOffice365.Activities.SharePoint;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Tenant ID." Name="in_strTenantIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Application ID." Name="in_strApplicationIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText=" Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used)." Name="in_strApplicationSecretAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="This will holds the share point URL" Name="in_strSharepointURL" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Filter condition to filter the list items and get the column value&#xD;&#xA;&#xD;&#xA;&quot;(fields/EmployeeName eq 'Matthew Grant') and (fields/JRNumber eq 'JR22644')&quot;" Name="in_FilterCondition" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="sharepoint list name" Name="in_strSharepointListName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Field value from specified column as output" Name="out_FieldValue" Type="OutArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Column name to find the respective value" Name="in_ColumnDisplayName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText=" Name of the Orchestrator Folder Path" Name="in_strOrchestratorFolderPath" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:Annotation.AnnotationText>UPTF000005F8eyI8SGVscExpbms+a19fQmFja2luZ0ZpZWxkIjpudWxsLCI8SW5pdGlhbFRvb2x0aXA+a19fQmFja2luZ0ZpZWxkIjoiXG5UaGlzIHdvcmtmbG93IFVzZXMgdGhlIE1pY3Jvc29mdCBHcmFwaCB0byBnZXQgdGhlIGxpc3QgaXRlbSBmaWVsZCB2YWx1ZSBmcm9tIHNoYXJlcG9pbnQgc2l0ZS5cblxuXG5MaXN0IG9mIGFyZ3VtZW50cyB1c2VkOlxuXG5BcHBsaWNhdGlvbl9TZWNyZXRfQXNzZXRfTmFtZSAtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIEFwcGxpY2F0aW9uIFNlY3JldCBJRCAtIFNlY3VyZSBTdHJpbmcgKFBhc3N3b3JkIG9mIHRoZSBjcmVkZW50aWFsIGlzIGJlaW5nIHVzZWQpLlxuQXBwbGljYXRpb25JRF9Bc3NldF9OYW1lLSBOYW1lIG9mIHRoZSBhc3NldCBjb250YWluaW5nIHRoZSBBcHBsaWNhdGlvbiBJRC5cblRlbmFudElEX0Fzc2V0X05hbWUtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIFRlbmFudCBJRC5cbkVtYWlsX0FjY291bnQgLSBUaGUgZW1haWwgYWRkcmVzcywgd2l0aCB3aGljaCB0byBpbnRlcmFjdC5cbkVtYWlsX0ZvbGRlci0gIFRoZSBtYWlsIGZvbGRlciwgZnJvbSB3aGljaCB0aGUgbWVzc2FnZXMgYXJlIHRvIGJlIHJldHJpZXZlZC5cbk1haWxfQ291bnQtIFRoZSBtYXhpbXVtIG51bWJlciBvZiBtYWlscyB0aGF0IGFyZSB0byBiZSByZXRyaWV2ZWQuIEl0IGlzIG1hbmRhdG9yeSB0byBwcm92aWRlIGEgbWFpbCBjb3VudC5cbkVtYWlsX0ZpbHRlci0gUXVlcnkgdXNlZCBmb3IgZmlsdGVyaW5nIHRoZSByZXR1cm5lZCBlbWFpbHMuIElmIHRoZSBxdWVyeSBpcyBub3QgY29tcGxldGVkLCBhbGwgZW1haWxzIGFyZSByZXR1cm5lZC4gXG5NYXJrX0VtYWlsX0FzX1JlYWQtICBJZiBUcnVlLCB0aGUgcmV0dXJuZWQgbWVzc2FnZXMgYXJlIG1hcmtlZCBhcyByZWFkLlxuUmVhZF9Pbmx5X1VucmVhZF9NYWlsLSBJZiBUcnVlLCB0aGUgcmV0dXJuZWQgbWVzc2FnZXMgYXJlIHVucmVhZCBlbWFpbHNcblJlc3VsdF9FbWFpbF9MaXN0IC0gUmV0dXJucyBhbGwgZW1haWxzIGZyb20gdGhlIHVzZXIncyBpbmJveC4gVGhpcyBmaWVsZCBzdXBwb3J0cyBvbmx5IE9mZmljZTM2NU1lc3NhZ2VbXSB2YXJpYWJsZXMuICIsIjxWZXJzaW9uPmtfX0JhY2tpbmdGaWVsZCI6MX0=</sap2010:Annotation.AnnotationText>
+  <sap:VirtualizedContainerService.HintSize>871.3333333333334,1954</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>GetMail_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Models</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Models</x:String>
+      <x:String>System.Activities.Runtime.Collections</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Shared.Activities.ConnectionService.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Enums</x:String>
+      <x:String>UiPath.Shared.Activities.Utils</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Filters</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Mail.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Filters</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Contracts</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Files.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Files</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.SharePoint</x:String>
+      <x:String>UiPath.Shared.Activities.Business</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.ViewModels</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>netstandard</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph.Core</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Microsoft.Win32.Primitives</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.Private.Xml</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Linq.Async.Queryable</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Linq.Parallel</AssemblyReference>
+      <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>System.Linq.Queryable</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="&#xA;This workflow Uses the Microsoft Graph to get the list item field value from sharepoint site.&#xA;&#xA;&#xA;List of arguments used:&#xA;&#xA;in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).&#xA;in_strApplicationIDAssetName- Name of the asset containing the Application ID.&#xA;in_strTenantIDAssetName- Name of the asset containing the Tenant ID.&#xA;in_strSharepointURL- URL of the process sharepoint site&#xA;in_FilterCondition-Filter condition to filter the list items and get the column value&#xA;in_strSharepointListName- Name of the sharepoint list in the site&#xA;in_ColumnDisplayName- Display name of the column to retrive from the sharepoint list&#xA; &#xA; &#xA;out_FieldValue - Extracted value from the respective column" DisplayName="Get List Item Field Value in Sharepoint" sap:VirtualizedContainerService.HintSize="668,1889.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_13">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ss:SecureString" Name="securestrApplicationSecret" />
+      <Variable x:TypeArguments="x:String" Name="strApplicationID" />
+      <Variable x:TypeArguments="x:String" Name="strTenantID" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message- Start Get Files or Folders Workflow" sap:VirtualizedContainerService.HintSize="606,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="[UiPath.Core.Activities.LogLevel.Trace]" Message="[&quot;Start workflow to get list item value.&quot;]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:LogMessage>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="GetO365Assets.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="606,115.33333333333333" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="GetO365Assets.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationSecretAssetName">
+          <VisualBasicValue x:TypeArguments="x:String" ExpressionText="in_strApplicationSecretAssetName" />
+        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_TenantIDAssetName">
+          <VisualBasicValue x:TypeArguments="x:String" ExpressionText="in_strTenantIDAssetName" />
+        </InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ApplicationID">
+          <VisualBasicReference x:TypeArguments="x:String" ExpressionText="strApplicationID" />
+        </OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationIDAssetName">
+          <VisualBasicValue x:TypeArguments="x:String" ExpressionText="in_strApplicationIDAssetName" />
+        </InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_TenantID">
+          <VisualBasicReference x:TypeArguments="x:String" ExpressionText="strTenantID" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="ss:SecureString" x:Key="out_SecureApplicationSecret">
+          <VisualBasicReference x:TypeArguments="ss:SecureString" ExpressionText="securestrApplicationSecret" />
+        </OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_strOrchestratorFolderPath">
+          <VisualBasicValue x:TypeArguments="x:String" ExpressionText="in_strOrchestratorFolderPath" />
+        </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <uma:Office365ApplicationScope Account="{x:Null}" ApplicationSecret="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Connector="{x:Null}" ContinueOnError="{x:Null}" OAuth2Username="{x:Null}" Password="{x:Null}" SecurePassword="{x:Null}" Timeout="{x:Null}" Username="{x:Null}" ApplicationId="[strApplicationID]" AuthenticationType="ApplicationIdAndSecret" DisplayName="Microsoft Office 365 Scope - Find Files and folders from a specific directory" Environment="Global" sap:VirtualizedContainerService.HintSize="606,774" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_3" OAuthApplication="UiPath" SecureApplicationSecret="[securestrApplicationSecret]" TenantId="[strTenantID]" UseConnectionService="False">
+      <uma:Office365ApplicationScope.AuthenticationScopes>
+        <scg:List x:TypeArguments="InArgument(x:String)" Capacity="1">
+          <InArgument x:TypeArguments="x:String">https://graph.microsoft.com/.default</InArgument>
+        </scg:List>
+      </uma:Office365ApplicationScope.AuthenticationScopes>
+      <uma:Office365ApplicationScope.Body>
+        <ActivityAction x:TypeArguments="umac:IClientServices">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="umac:IClientServices" Name="ParentScope" />
+          </ActivityAction.Argument>
+          <Sequence sap:VirtualizedContainerService.HintSize="572,688.6666666666666" sap2010:WorkflowViewState.IdRef="Sequence_14">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="umm:Office365SharepointList" Name="listSPList" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <umas:GetListInfo ContinueOnError="{x:Null}" AuthScopesInvalid="False" DisplayName=" Get List Info" sap:VirtualizedContainerService.HintSize="530,188.66666666666666" sap2010:WorkflowViewState.IdRef="GetListInfo_1" IncludeColumnsDefinitions="False" List="[listSPList]" ListTitleOrId="[in_strSharepointListName]" SiteUrlOrId="[in_strSharepointURL]" />
+            <umas:ForEachListItem CurrentIndex="{x:Null}" DisplayName=" For Each List Item" Filter="[in_FilterCondition]" sap:VirtualizedContainerService.HintSize="530,372.6666666666667" sap2010:WorkflowViewState.IdRef="ForEachListItem_1" List="[listSPList]">
+              <umas:ForEachListItem.Body>
+                <ActivityAction x:TypeArguments="umm:Office365SharepointListItem, x:Int32">
+                  <ActivityAction.Argument1>
+                    <DelegateInArgument x:TypeArguments="umm:Office365SharepointListItem" Name="ListItem" />
+                  </ActivityAction.Argument1>
+                  <ActivityAction.Argument2>
+                    <DelegateInArgument x:TypeArguments="x:Int32" Name="ListItemIndex" />
+                  </ActivityAction.Argument2>
+                  <Sequence DisplayName=" Do" sap:VirtualizedContainerService.HintSize="496,196" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign DisplayName="Assign Field value" sap:VirtualizedContainerService.HintSize="434,85.33333333333333" sap2010:WorkflowViewState.IdRef="Assign_5">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[out_FieldValue]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[ListItem.Fields.Where(function(x) x.DisplayName.Equals(in_ColumnDisplayName))(0).Value.tostring]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                </ActivityAction>
+              </umas:ForEachListItem.Body>
+            </umas:ForEachListItem>
+          </Sequence>
+        </ActivityAction>
+      </uma:Office365ApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </uma:Office365ApplicationScope>
+    <ui:LogMessage DisplayName="Log Message value" sap:VirtualizedContainerService.HintSize="606,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="[UiPath.Core.Activities.LogLevel.Trace]" Message="[out_FieldValue]" />
+    <ui:LogMessage DisplayName="Log Message- End Get Files or Folders Workflow" sap:VirtualizedContainerService.HintSize="606,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="[UiPath.Core.Activities.LogLevel.Trace]" Message="[&quot;End workflow to get list item field Value&quot;]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:LogMessage>
+  </Sequence>
+</Activity>

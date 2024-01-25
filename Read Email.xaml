@@ -1,0 +1,276 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="GetMail" this:GetMail.in_boolMarkEmailAsRead="False" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ss="clr-namespace:System.Security;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uma="clr-namespace:UiPath.MicrosoftOffice365.Activities;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umac="clr-namespace:UiPath.MicrosoftOffice365.Activities.Contracts;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Name of the Orchestrator Folder Path" Name="in_strOrchestratorFolderPath" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText=" Query used for filtering the returned emails. If the query is not completed, all emails are returned. " Name="in_strEmailFilter" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Returns all emails from the user's inbox. This field supports only Office365Message[] variables. " Name="out_listEmailResult" Type="OutArgument(umm:Office365Message[])" />
+    <x:Property sap2010:Annotation.AnnotationText="If True, the returned messages are marked as read." Name="in_boolMarkEmailAsRead" Type="InArgument(x:Boolean)" />
+    <x:Property sap2010:Annotation.AnnotationText="The maximum number of mails that are to be retrieved. It is mandatory to provide a mail count." Name="in_intEmailRetrievalCount" Type="InArgument(x:Int32)" />
+    <x:Property sap2010:Annotation.AnnotationText=" Name of the asset containing the Tenant ID." Name="in_strTenantIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Application ID." Name="in_strApplicationIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText=" Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used)." Name="in_strApplicationSecretAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="The email address, with which to interact." Name="in_strEmailAccount" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="The mail folder, from which the messages are to be retrieved." Name="in_strEmailFolder" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:Annotation.AnnotationText>UPTF000007DCeyI8SGVscExpbms+a19fQmFja2luZ0ZpZWxkIjpudWxsLCI8SW5pdGlhbFRvb2x0aXA+a19fQmFja2luZ0ZpZWxkIjoiVGhpcyB3b3JrZmxvdyBVc2VzIHRoZSBNaWNyb3NvZnQgR3JhcGggR2V0IG1lc3NhZ2UgYW5kIExpc3QgbWVzc2FnZXMgQVBJcyB0byByZXRyaWV2ZSB0aGUgbWF0Y2hpbmcgbWVzc2FnZXMgZnJvbSBhIHNwZWNpZmllZCBtYWlsYm94IChpbl9NYWlsQWNjb3VudCkuXG5cbkFmdGVyIHBlcmZvcm1pbmcgdGhlIHNlYXJjaCwgdGhlIGFjdGl2aXR5IHJldHVybnMgYW4gYXJyYXkgb2YgdGhlIG1hdGNoaW5nIE9mZmljZTM2NU1lc3NhZ2Ugb2JqZWN0cyAoUmVzdWx0X0VtYWlsX0xpc3QpIHRoYXQgeW91IGNhbiB1c2UgYXMgaW5wdXQgdmFyaWFibGVzIGluIHN1YnNlcXVlbnQgYWN0aXZpdGllcyAoZS5nLiwgRm9yd2FyZCBNYWlsIGFuZCBNb3ZlIE1haWwpLlxuVGhlIG91dHB1dCB3aWxsIGJlIGEgbGlzdCBvZiBPMzY1TWFpbE1lc3NhZ2VzLlxuXG5MaXN0IG9mIGFyZ3VtZW50cyB1c2VkOlxuXG5pbl9zdHJBcHBsaWNhdGlvblNlY3JldEFzc2V0TmFtZSAtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIEFwcGxpY2F0aW9uIFNlY3JldCBJRCAtIFNlY3VyZSBTdHJpbmcgKFBhc3N3b3JkIG9mIHRoZSBjcmVkZW50aWFsIGlzIGJlaW5nIHVzZWQpLlxuaW5fc3RyQXBwbGljYXRpb25JREFzc2V0TmFtZS0gTmFtZSBvZiB0aGUgYXNzZXQgY29udGFpbmluZyB0aGUgQXBwbGljYXRpb24gSUQuXG5pbl9zdHJUZW5hbnRJREFzc2V0TmFtZS0gTmFtZSBvZiB0aGUgYXNzZXQgY29udGFpbmluZyB0aGUgVGVuYW50IElELlxuaW5fc3RyRW1haWxBY2NvdW50IC0gVGhlIGVtYWlsIGFkZHJlc3MsIHdpdGggd2hpY2ggdG8gaW50ZXJhY3QuXG5pbl9zdHJFbWFpbEZvbGRlci0gIFRoZSBtYWlsIGZvbGRlciwgZnJvbSB3aGljaCB0aGUgbWVzc2FnZXMgYXJlIHRvIGJlIHJldHJpZXZlZC5cbmluX2ludEVtYWlsUmV0cmlldmFsQ291bnQtIFRoZSBtYXhpbXVtIG51bWJlciBvZiBtYWlscyB0aGF0IGFyZSB0byBiZSByZXRyaWV2ZWQuIEl0IGlzIG1hbmRhdG9yeSB0byBwcm92aWRlIGEgbWFpbCBjb3VudC5cbmluX3N0ckVtYWlsRmlsdGVyLSBRdWVyeSB1c2VkIGZvciBmaWx0ZXJpbmcgdGhlIHJldHVybmVkIGVtYWlscy4gSWYgdGhlIHF1ZXJ5IGlzIG5vdCBjb21wbGV0ZWQsIGFsbCBlbWFpbHMgYXJlIHJldHVybmVkLiBcbmluX2Jvb2xNYXJrRW1haWxBc1JlYWQtICBJZiBUcnVlLCB0aGUgcmV0dXJuZWQgbWVzc2FnZXMgYXJlIG1hcmtlZCBhcyByZWFkLlxub3V0X2xpc3RSZXN1bHRFbWFpbCAtIFJldHVybnMgYWxsIGVtYWlscyBmcm9tIHRoZSB1c2VyJ3MgaW5ib3guIFRoaXMgZmllbGQgc3VwcG9ydHMgb25seSBPZmZpY2UzNjVNZXNzYWdlW10gdmFyaWFibGVzLiBcbmluX3N0ck9yY2hlc3RyYXRvckZvbGRlclBhdGggLSBOYW1lIG9mIHRoZSBPcmNoZXN0cmF0b3IgRm9sZGVyIFBhdGgiLCI8VmVyc2lvbj5rX19CYWNraW5nRmllbGQiOjF9</sap2010:Annotation.AnnotationText>
+  <sap:VirtualizedContainerService.HintSize>871.3333333333334,2488</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>GetMail_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Models</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Models</x:String>
+      <x:String>System.Activities.Runtime.Collections</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Shared.Activities.ConnectionService.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Enums</x:String>
+      <x:String>UiPath.Shared.Activities.Utils</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Filters</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Mail.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Filters</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Contracts</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.ViewModels</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>netstandard</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph.Core</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Microsoft.Win32.Primitives</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.Private.Xml</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="This workflow Uses the Microsoft Graph Get message and List messages APIs to retrieve the matching messages from a specified mailbox (in_MailAccount).&#xA;&#xA;After performing the search, the activity returns an array of the matching Office365Message objects (Result_Email_List) that you can use as input variables in subsequent activities (e.g., Forward Mail and Move Mail).&#xA;The output will be a list of O365MailMessages.&#xA;&#xA;List of arguments used:&#xA;&#xA;in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).&#xA;in_strApplicationIDAssetName- Name of the asset containing the Application ID.&#xA;in_strTenantIDAssetName- Name of the asset containing the Tenant ID.&#xA;in_strEmailAccount - The email address, with which to interact.&#xA;in_strEmailFolder-  The mail folder, from which the messages are to be retrieved.&#xA;in_intEmailRetrievalCount- The maximum number of mails that are to be retrieved. It is mandatory to provide a mail count.&#xA;in_strEmailFilter- Query used for filtering the returned emails. If the query is not completed, all emails are returned. &#xA;in_boolMarkEmailAsRead-  If True, the returned messages are marked as read.&#xA;out_listResultEmail - Returns all emails from the user's inbox. This field supports only Office365Message[] variables. &#xA;in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path" DisplayName="O365 GetMail" sap:VirtualizedContainerService.HintSize="606.6666666666666,2423.3333333333335" sap2010:WorkflowViewState.IdRef="Sequence_11">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <TryCatch DisplayName="Try Catch - Get Mail" sap:VirtualizedContainerService.HintSize="544.6666666666666,1900.6666666666667" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <TryCatch.Try>
+        <Sequence sap2010:Annotation.AnnotationText="" DisplayName="GetMail" sap:VirtualizedContainerService.HintSize="506,1661.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="ss:SecureString" Name="securestrApplicationSecret" />
+            <Variable x:TypeArguments="x:String" Name="strApplicationID" />
+            <Variable x:TypeArguments="x:String" Name="strTenantID" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Start" sap:VirtualizedContainerService.HintSize="444,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;Start workflow to Getmail.&quot;]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:LogMessage>
+          <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="GetO365Assets.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="444,115.33333333333333" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="GetO365Assets.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationSecretAssetName">[in_strApplicationSecretAssetName]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_TenantIDAssetName">[in_strTenantIDAssetName]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_ApplicationID">[strApplicationID]</OutArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationIDAssetName">[in_strApplicationIDAssetName]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_TenantID">[strTenantID]</OutArgument>
+              <OutArgument x:TypeArguments="ss:SecureString" x:Key="out_SecureApplicationSecret">[securestrApplicationSecret]</OutArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_strOrchestratorFolderPath">[in_strOrchestratorFolderPath]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:LogMessage DisplayName="Log Message -asset read" sap:VirtualizedContainerService.HintSize="444,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Got assets. Moving to read mail.&quot;]" />
+          <If Condition="[in_boolMarkEmailAsRead]" DisplayName=" If " sap:VirtualizedContainerService.HintSize="444,629.3333333333334" sap2010:WorkflowViewState.IdRef="If_5">
+            <If.Then>
+              <Sequence sap:VirtualizedContainerService.HintSize="410,222.66666666666666" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <uma:Office365ApplicationScope Account="{x:Null}" ApplicationSecret="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Connector="{x:Null}" ContinueOnError="{x:Null}" OAuth2Username="{x:Null}" Password="{x:Null}" SecurePassword="{x:Null}" Timeout="{x:Null}" Username="{x:Null}" ApplicationId="[strApplicationID]" AuthenticationType="ApplicationIdAndSecret" DisplayName="Microsoft Office 365 Scope : Get mail" Environment="Global" sap:VirtualizedContainerService.HintSize="368,135.33333333333334" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_2" OAuthApplication="UiPath" SecureApplicationSecret="[securestrApplicationSecret]" TenantId="[strTenantID]" UseConnectionService="False">
+                  <uma:Office365ApplicationScope.AuthenticationScopes>
+                    <scg:List x:TypeArguments="InArgument(x:String)" Capacity="1">
+                      <InArgument x:TypeArguments="x:String">https://graph.microsoft.com/.default</InArgument>
+                    </scg:List>
+                  </uma:Office365ApplicationScope.AuthenticationScopes>
+                  <uma:Office365ApplicationScope.Body>
+                    <ActivityAction x:TypeArguments="umac:IClientServices">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="umac:IClientServices" Name="ParentScope" />
+                      </ActivityAction.Argument>
+                      <umam:GetMail ContinueOnError="{x:Null}" EmailId="{x:Null}" Account="[in_strEmailAccount]" AuthScopesInvalid="False" DisplayName="Get Mail Read" GetAsHTML="False" sap:VirtualizedContainerService.HintSize="334,39.333333333333336" sap2010:WorkflowViewState.IdRef="GetMail_6" MailFolder="[in_strEmailFolder]" MarkAsRead="True" OnlyUnreadMessages="True" OrderByDate="NewestFirst" Query="[in_strEmailFilter]" Results="[out_listEmailResult]" Top="[in_intEmailRetrievalCount]">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </umam:GetMail>
+                    </ActivityAction>
+                  </uma:Office365ApplicationScope.Body>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </uma:Office365ApplicationScope>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence sap:VirtualizedContainerService.HintSize="410,222.66666666666666" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <uma:Office365ApplicationScope Account="{x:Null}" ApplicationSecret="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Connector="{x:Null}" ContinueOnError="{x:Null}" OAuth2Username="{x:Null}" Password="{x:Null}" SecurePassword="{x:Null}" Timeout="{x:Null}" Username="{x:Null}" ApplicationId="[strApplicationID]" AuthenticationType="ApplicationIdAndSecret" DisplayName="Microsoft Office 365  - Scope" Environment="Global" sap:VirtualizedContainerService.HintSize="368,135.33333333333334" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_6" OAuthApplication="UiPath" SecureApplicationSecret="[securestrApplicationSecret]" TenantId="[strTenantID]" UseConnectionService="False">
+                  <uma:Office365ApplicationScope.AuthenticationScopes>
+                    <scg:List x:TypeArguments="InArgument(x:String)" Capacity="1">
+                      <InArgument x:TypeArguments="x:String">https://graph.microsoft.com/.default</InArgument>
+                    </scg:List>
+                  </uma:Office365ApplicationScope.AuthenticationScopes>
+                  <uma:Office365ApplicationScope.Body>
+                    <ActivityAction x:TypeArguments="umac:IClientServices">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="umac:IClientServices" Name="ParentScope" />
+                      </ActivityAction.Argument>
+                      <umam:GetMail ContinueOnError="{x:Null}" EmailId="{x:Null}" Account="[in_strEmailAccount]" AuthScopesInvalid="False" DisplayName=" Get Mail" GetAsHTML="False" sap:VirtualizedContainerService.HintSize="334,39.33333333333334" sap2010:WorkflowViewState.IdRef="GetMail_7" MailFolder="[in_strEmailFolder]" MarkAsRead="False" OnlyUnreadMessages="True" OrderByDate="NewestFirst" Query="[in_strEmailFilter]" Results="[out_listEmailResult]" Top="[in_intEmailRetrievalCount]">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </umam:GetMail>
+                    </ActivityAction>
+                  </uma:Office365ApplicationScope.Body>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </uma:Office365ApplicationScope>
+              </Sequence>
+            </If.Else>
+          </If>
+          <ui:LogMessage DisplayName="Log Message- Mail count" sap:VirtualizedContainerService.HintSize="444,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;No of unread mails retrived with the given query: &quot;+out_listEmailResult.length.ToString]" />
+          <ui:LogMessage DisplayName="Log Message- End" sap:VirtualizedContainerService.HintSize="444,141" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;End workflow to Get mail.&quot;]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:LogMessage>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="510.6666666666667,22" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <ui:LogMessage DisplayName="Log Message:failed" sap:VirtualizedContainerService.HintSize="334,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;Failed to get mails. Exception Reason: &quot;+exception.Message]" />
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+  </Sequence>
+</Activity>
