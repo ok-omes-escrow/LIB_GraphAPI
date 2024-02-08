@@ -16,7 +16,8 @@ Dependencies used:
 - [Activity-7](#activity-7-send-email)
 - [Activity-8](#activity-8-update-list-item)
 - [Activity-9](#activity-9-upload-file)
-
+- [Activity-10](#activity-10-delete-file)
+- [Activity-11](#activity-11-get-list-items)
 
 
 
@@ -298,3 +299,62 @@ This activity uses the Microsoft Graph API to retrieve the Files and Folders in 
 
 - [Back to menu](#features)
 
+
+## Activity 10: Delete File
+
+### Details:
+-This workflow uses the Microsoft Graph api to Delete file from sharepoint
+
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strParentDriveItemOptional- Drive item variable for upload file(optional)
+<br/>in_strSpParentFolderPath - Folder path from root level.
+<br/>in_strShareppointURL- This will holds the share point URL.
+<br/>in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path.
+<br/>out_boolFileDeleted : boolean result file deleted or not.
+
+- Table Content: 
+
+    | Command | Description |
+    | --- | --- |
+    | Input | in_strTenantIDAssetName : string; in_strApplicationIDAssetName  : string;  in_strApplicationSecretAssetName : string; in_strParentDriveItemOptional: string; in_strOrchestratorFolderPath : string; in_strSharepointURL : string; in_strSpParentFolderPath: string;|
+    | Output | out_boolFileDeleted : bool; |
+    | Input/Output | NA |
+    | Requirements | NA |
+    | App Version | NA |
+
+
+
+- [Back to menu](#features)
+
+## Activity 11: Get List Items
+
+### Details:
+-This workflow Uses the Microsoft Graph to get the list item field value from sharepoint site.
+<br/>List of arguments used:
+<br/>in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).
+<br/>in_strApplicationIDAssetName- Name of the asset containing the Application ID.
+<br/>in_strTenantIDAssetName- Name of the asset containing the Tenant ID.
+<br/>in_strSharepointURL- URL of the process sharepoint site.
+<br/>in_FilterCondition-Filter condition to filter the list items and get the column value.
+<br/>in_strSharepointListName- Name of the sharepoint list in the site.
+<br/>in_arrColumnNames-  columns list which we need to look in sharepoint.
+<br/>in_strOrchestratorFolderPath - Orchestartor path.
+<br/>out_dt_ListItems - datable contains list of items.
+<br/>out_intListItemCount - no of list items as integer value.
+
+- Table Content: 
+
+    | Command | Description |
+    | --- | --- |
+    | Input | in_strTenantIDAssetName : string; in_strApplicationIDAssetName  : string;  in_strApplicationSecretAssetName : string; in_FilterCondition: string; in_strOrchestratorFolderPath : string; in_strSharepointURL : string; in_arrColumnNames: array; in_strSharepointListName :string;|
+    | Output | out_dt_ListItems : datatable; out_intListItemCount :int;|
+    | Input/Output | NA |
+    | Requirements | NA |
+    | App Version | NA |
+
+
+
+- [Back to menu](#features)
