@@ -7,17 +7,17 @@ Dependencies used:
  "UiPath.System.Activities": "23.4.5"
 
 ## Features
-- [Activity-1](#activity-1-create-folder)
-- [Activity-2](#activity-2-download-file)
-- [Activity-3](#activity-3-files-or-folders-exist)
-- [Activity-4](#activity-4-get-files-or-folders)
-- [Activity-5](#activity-5-get-list-item-field-value)
-- [Activity-6](#activity-6-read-email)
-- [Activity-7](#activity-7-send-email)
-- [Activity-8](#activity-8-update-list-item)
-- [Activity-9](#activity-9-upload-file)
-- [Activity-10](#activity-10-delete-file)
-- [Activity-11](#activity-11-get-list-items)
+- [Activity-1: Create Folder](#activity-1-create-folder)
+- [Activity-2: Download File](#activity-2-download-file)
+- [Activity-3: Files or Folders Exist](#activity-3-files-or-folders-exist)
+- [Activity-4: Get Files or Folders](#activity-4-get-files-or-folders)
+- [Activity-5: Get List Item Field Value](#activity-5-get-list-item-field-value)
+- [Activity-6: Read Email](#activity-6-read-email)
+- [Activity-7: Send Email](#activity-7-send-email)
+- [Activity-8: Update List Item](#activity-8-update-list-item)
+- [Activity-9: Upload File](#activity-9-upload-file)
+- [Activity-10: Delete File](#activity-10-delete-file)
+- [Activity-11: Get List Items](#activity-11-get-list-items)
 
 
 
@@ -111,7 +111,7 @@ Dependencies used:
 
 - [Back to menu](#features)
 
-## Activity 4: Get Files¬ or Folders
+## Activity 4: Get Files or Folders
 
 ### Details:
 This activity uses the Microsoft Graph API to retrieve the Files and Folders in a specified SharePoint site.
