@@ -1,16 +1,17 @@
 {
   "name": "LIB_GraphAPI",
+  "projectId": "a267052f-0ffd-4b09-a397-38092c40c5eb",
   "description": "This library interacts with the O365 actions to perform email & sharepoint actions",
   "main": "NewActivity.xaml",
   "dependencies": {
-    "UiPath.MicrosoftOffice365.Activities": "2.4.3",
-    "UiPath.System.Activities": "23.4.5"
+    "UiPath.MicrosoftOffice365.Activities": "3.0.11",
+    "UiPath.System.Activities": "25.2.3"
   },
   "webServices": [],
   "entitiesStores": [],
   "schemaVersion": "4.0",
   "studioVersion": "23.4.5.0",
-  "projectVersion": "1.0.1-alpha.2",
+  "projectVersion": "1.0.9323.22777",
   "runtimeOptions": {
     "autoDispose": false,
     "netFrameworkLazyLoading": false,
@@ -43,7 +44,7 @@
       "ignoredFiles": []
     },
     "fileInfoCollection": [],
-    "modernBehavior": true
+    "saveToCloud": false
   },
   "expressionLanguage": "VisualBasic",
   "isTemplate": false,
