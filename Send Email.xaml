@@ -1,0 +1,335 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Send_Email" this:Send_Email.in_listOfAttachment="[New List(of String)]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:sc="clr-namespace:System.ComponentModel;assembly=System.ComponentModel.TypeConverter" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ss="clr-namespace:System.Security;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uma="clr-namespace:UiPath.MicrosoftOffice365.Activities;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umac="clr-namespace:UiPath.MicrosoftOffice365.Activities.Contracts;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Name of the Orchestrator Folder Path&#xA;" Name="in_strOrchestratorFolderPath" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Tenant ID." Name="in_strTenantIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Application ID." Name="in_strApplicationIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used)." Name="in_strApplicationSecretAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="The mail account that is being used to send the mail. " Name="in_strFromEmailAccount" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="The mail subject of the mail that is to be sent." Name="in_strMailSubject" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="The body of the mail, that is to be sent. ( In HTML format)&#xD;&#xA;&#xD;&#xA;*Note: &quot;HTML body and Text body both are acceptable&quot;" Name="in_strMailBody" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="List of files that are to be attached with the mail." Name="in_listOfAttachment" Type="InArgument(scg:List(x:String))" />
+    <x:Property sap2010:Annotation.AnnotationText="String array of the recipients to which the mail has to be sent. ( A comma-separated list of email addresses that you want to send your mail to. )&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;Example: {&quot;xxxx@xx.gov&quot;,&quot;xxxx@xx.gov&quot;}" Name="in_strMailRecipientTo" Type="InArgument(s:String[])" />
+    <x:Property sap2010:Annotation.AnnotationText="String array of the recipients to which the mail is to be CC'ed. ( A comma-separated list of email addresses that you want to be included as Cc recipients.)&#xD;&#xA;&#xD;&#xA;Example: {&quot;xxxx@xx.gov&quot;,&quot;xxxx@xx.gov&quot;}" Name="in_strMailRecipientCC" Type="InArgument(s:String[])" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:Annotation.AnnotationText>UPTF00000744eyI8SGVscExpbms+a19fQmFja2luZ0ZpZWxkIjpudWxsLCI8SW5pdGlhbFRvb2x0aXA+a19fQmFja2luZ0ZpZWxkIjoiVGhpcyB3b3JrZmxvdyB1c2VzIHRoZSBNaWNyb3NvZnQgR3JhcGggQ3JlYXRlIG1lc3NhZ2UgYW5kIFNlbmQgbWFpbCBBUElzIHRvIHNlbmQgYSBtZXNzYWdlIChCb2R5IGFuZCBTdWJqZWN0KSB0byBvbmUgb3IgbW9yZSByZWNpcGllbnRzIChUbywgQ0MsIGFuZCBCQ0MpLiBUaGlzIGFjdGl2aXR5IGFsc28gZ2l2ZXMgeW91IHRoZSBvcHRpb24gdG8gaW5jbHVkZSBvbmUgb3IgbW9yZSBhdHRhY2htZW50cyAoQXR0YWNobWVudHMpIHdpdGggeW91ciBtZXNzYWdlLlxuXG5MaXN0IG9mIGFyZ3VtZW50cyB1c2VkOlxuaW5fQXBwbGljYXRpb25TZWNyZXRBc3NldE5hbWUgLSBOYW1lIG9mIHRoZSBhc3NldCBjb250YWluaW5nIHRoZSBBcHBsaWNhdGlvbiBTZWNyZXQgSUQgLSBTZWN1cmUgU3RyaW5nIChQYXNzd29yZCBvZiB0aGUgY3JlZGVudGlhbCBpcyBiZWluZyB1c2VkKS5cbmluX0FwcGxpY2F0aW9uSURBc3NldE5hbWUtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIEFwcGxpY2F0aW9uIElELlxuaW5fVGVuYW50SURBc3NldE5hbWUtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIFRlbmFudCBJRC5cbmluX01haWxCb2R5IC0gVGhlIGJvZHkgb2YgdGhlIG1haWwsIHRoYXQgaXMgdG8gYmUgc2VudC4gKCBJbiBIVE1MIGZvcm1hdClcbmluX01haWxTdWJqZWN0IC0gVGhlIG1haWwgc3ViamVjdCBvZiB0aGUgbWFpbCB0aGF0IGlzIHRvIGJlIHNlbnQuXG5pbl9NYWlsQWNjb3VudC0gVGhlIG1haWwgYWNjb3VudCB0aGF0IGlzIGJlaW5nIHVzZWQgdG8gc2VuZCB0aGUgbWFpbC4gXG5pbl9NYWlsUmVjaXBpZW50Q0MgLSBTdHJpbmcgYXJyYXkgb2YgdGhlIHJlY2lwaWVudHMgdG8gd2hpY2ggdGhlIG1haWwgaXMgdG8gYmUgQ0MnZWQuICggQSBjb21tYS1zZXBhcmF0ZWQgbGlzdCBvZiBlbWFpbCBhZGRyZXNzZXMgdGhhdCB5b3Ugd2FudCB0byBiZSBpbmNsdWRlZCBhcyBDYyByZWNpcGllbnRzLilcbmluX01haWxSZWNpcGllbnRUbyAtIFN0cmluZyBhcnJheSBvZiB0aGUgcmVjaXBpZW50cyB0byB3aGljaCB0aGUgbWFpbCBoYXMgdG8gYmUgc2VudC4gKCBBIGNvbW1hLXNlcGFyYXRlZCBsaXN0IG9mIGVtYWlsIGFkZHJlc3NlcyB0aGF0IHlvdSB3YW50IHRvIHNlbmQgeW91ciBtYWlsIHRvLiApXG5pbl9MaXN0T2ZBdHRhY2htZW50cyAtIExpc3Qgb2YgZmlsZXMgdGhhdCBhcmUgdG8gYmUgYXR0YWNoZWQgd2l0aCB0aGUgbWFpbC5cbmluX3N0ck9yY2hlc3RyYXRvckZvbGRlclBhdGggLSBOYW1lIG9mIHRoZSBPcmNoZXN0cmF0b3IgRm9sZGVyIFBhdGhcblxuIiwiPFZlcnNpb24+a19fQmFja2luZ0ZpZWxkIjoxfQ==</sap2010:Annotation.AnnotationText>
+  <sap:VirtualizedContainerService.HintSize>871.3333333333334,2583.3333333333335</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>Send_Email_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Enums</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>System.Activities.Runtime.Collections</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Shared.Activities.ConnectionService.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>System.ComponentModel</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>netstandard</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph.Core</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.ViewModels</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Microsoft.Win32.Primitives</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="This workflow uses the Microsoft Graph Create message and Send mail APIs to send a message (Body and Subject) to one or more recipients (To, CC, and BCC). This activity also gives you the option to include one or more attachments (Attachments) with your message.&#xA;&#xA;List of arguments used:&#xA;in_ApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).&#xA;in_ApplicationIDAssetName- Name of the asset containing the Application ID.&#xA;in_TenantIDAssetName- Name of the asset containing the Tenant ID.&#xA;in_MailBody - The body of the mail, that is to be sent. ( In HTML format)&#xA;in_MailSubject - The mail subject of the mail that is to be sent.&#xA;in_MailAccount- The mail account that is being used to send the mail. &#xA;in_MailRecipientCC - String array of the recipients to which the mail is to be CC'ed. ( A comma-separated list of email addresses that you want to be included as Cc recipients.)&#xA;in_MailRecipientTo - String array of the recipients to which the mail has to be sent. ( A comma-separated list of email addresses that you want to send your mail to. )&#xA;in_ListOfAttachments - List of files that are to be attached with the mail.&#xA;in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path&#xA;&#xA;" DisplayName="Send Mail" sap:VirtualizedContainerService.HintSize="744,2518.6666666666665" sap2010:WorkflowViewState.IdRef="Sequence_6">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <TryCatch DisplayName="Try Catch- Send Mail" sap:VirtualizedContainerService.HintSize="682,2062.6666666666665" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <Sequence DisplayName="SendMail" sap:VirtualizedContainerService.HintSize="643.3333333333334,1823.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="ss:SecureString" Name="securestrApplicationSecret" />
+            <Variable x:TypeArguments="x:String" Name="strApplicationID" />
+            <Variable x:TypeArguments="x:String" Name="strTenantID" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Start" sap:VirtualizedContainerService.HintSize="581.3333333333334,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Start workflow to Send mail.&quot;]" />
+          <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="GetO365Assets.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="581.3333333333334,115.33333333333333" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="GetO365Assets.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationSecretAssetName">[in_strApplicationSecretAssetName]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_TenantIDAssetName">[in_strTenantIDAssetName]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_ApplicationID">[strApplicationID]</OutArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationIDAssetName">[in_strApplicationIDAssetName]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_TenantID">[strTenantID]</OutArgument>
+              <OutArgument x:TypeArguments="ss:SecureString" x:Key="out_SecureApplicationSecret">[securestrApplicationSecret]</OutArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="in_strOrchestratorFolderPath">[in_strOrchestratorFolderPath]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:LogMessage DisplayName="Log Message- Sending mail" sap:VirtualizedContainerService.HintSize="581.3333333333334,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Starting to send mail. &quot;]" />
+          <uma:Office365ApplicationScope Account="{x:Null}" ApplicationSecret="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Connector="{x:Null}" ContinueOnError="{x:Null}" OAuth2Username="{x:Null}" Password="{x:Null}" SecurePassword="{x:Null}" Timeout="{x:Null}" Username="{x:Null}" ApplicationId="[strApplicationID]" AuthenticationType="ApplicationIdAndSecret" DisplayName="Microsoft Office 365 Scope    " Environment="Global" sap:VirtualizedContainerService.HintSize="581.3333333333334,1006.6666666666666" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_1" OAuthApplication="UiPath" SecureApplicationSecret="[securestrApplicationSecret]" TenantId="[strTenantID]" UseConnectionService="False">
+            <uma:Office365ApplicationScope.AuthenticationScopes>
+              <scg:List x:TypeArguments="InArgument(x:String)" Capacity="1">
+                <InArgument x:TypeArguments="x:String">https://graph.microsoft.com/.default</InArgument>
+              </scg:List>
+            </uma:Office365ApplicationScope.AuthenticationScopes>
+            <uma:Office365ApplicationScope.Body>
+              <ActivityAction x:TypeArguments="umac:IClientServices">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="umac:IClientServices" Name="ParentScope" />
+                </ActivityAction.Argument>
+                <ui:IfElseIf DisplayName="Else - If" sap:VirtualizedContainerService.HintSize="547.3333333333334,921.3333333333334" sap2010:WorkflowViewState.IdRef="IfElseIf_1">
+                  <ui:IfElseIf.ConditionBlocks>
+                    <sc:BindingList x:TypeArguments="ui:IfElseIfBlock" AllowEdit="True" AllowNew="True" AllowRemove="True" RaiseListChangedEvents="True">
+                      <ui:IfElseIfBlock BlockType="If" Condition="[in_listOfAttachment.count&gt;0 and in_strMailBody.ToLower.Contains(&quot;&lt;br&gt;&quot;)=True]">
+                        <ui:IfElseIfBlock.Then>
+                          <Sequence DisplayName="HTML email with Attachment" sap:VirtualizedContainerService.HintSize="450,84.66666666666667" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:LogMessage DisplayName="Log Message- Sending HTML mail with attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Sending HTML mail with attachments.&quot;]" />
+                            <umam:SendMail Bcc="{x:Null}" ContinueOnError="{x:Null}" ReplyTo="{x:Null}" Account="[in_strFromEmailAccount]" AttachmentsCollection="[in_listOfAttachment]" AuthScopesInvalid="False" Body="[in_strMailBody]" Cc="[in_strMailRecipientCC]" DisplayName="Send HTML Mail- With attachments" From="[in_strFromEmailAccount]" sap:VirtualizedContainerService.HintSize="434,331" sap2010:WorkflowViewState.IdRef="SendMail_4" Importance="Normal" IsBodyHTML="True" IsDraft="False" Subject="[in_strMailSubject]" To="[in_strMailRecipientTo]">
+                              <umam:SendMail.Attachments>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </umam:SendMail.Attachments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </umam:SendMail>
+                            <ui:LogMessage DisplayName="Log Message- HTML Mail sent with attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;Mail sent with attachments.&quot;]">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:LogMessage>
+                          </Sequence>
+                        </ui:IfElseIfBlock.Then>
+                      </ui:IfElseIfBlock>
+                      <ui:IfElseIfBlock BlockType="ElseIf" Condition="[in_listOfAttachment.count&gt;0 and in_strMailBody.ToLower.Contains(&quot;&lt;br&gt;&quot;)=False]">
+                        <ui:IfElseIfBlock.Then>
+                          <Sequence DisplayName="Normal Email with Attachment" sap:VirtualizedContainerService.HintSize="450,84.66666666666667" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:LogMessage DisplayName="Log Message- Sending mail with attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;Sending mail with attachments.&quot;]" />
+                            <umam:SendMail Bcc="{x:Null}" ContinueOnError="{x:Null}" ReplyTo="{x:Null}" Account="[in_strFromEmailAccount]" AttachmentsCollection="[in_listOfAttachment]" AuthScopesInvalid="False" Body="[in_strMailBody]" Cc="[in_strMailRecipientCC]" DisplayName="Send Mail- With attachments" From="[in_strFromEmailAccount]" sap:VirtualizedContainerService.HintSize="434,331" sap2010:WorkflowViewState.IdRef="SendMail_5" Importance="Normal" IsBodyHTML="False" IsDraft="False" Subject="[in_strMailSubject]" To="[in_strMailRecipientTo]">
+                              <umam:SendMail.Attachments>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </umam:SendMail.Attachments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </umam:SendMail>
+                            <ui:LogMessage DisplayName="Log Message- Mail sent with attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;Mail sent with attachments.&quot;]">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:LogMessage>
+                          </Sequence>
+                        </ui:IfElseIfBlock.Then>
+                      </ui:IfElseIfBlock>
+                      <ui:IfElseIfBlock BlockType="ElseIf" Condition="[in_listOfAttachment.count=0 and in_strMailBody.ToLower.Contains(&quot;&lt;br&gt;&quot;)=True]">
+                        <ui:IfElseIfBlock.Then>
+                          <Sequence DisplayName="HTML Email No Attachment" sap:VirtualizedContainerService.HintSize="450,81" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:LogMessage DisplayName="Log Message- Sending HTML mail without attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;Sending HTML mail without attachments.&quot;]" />
+                            <umam:SendMail AttachmentsCollection="{x:Null}" Bcc="{x:Null}" ContinueOnError="{x:Null}" ReplyTo="{x:Null}" Account="[in_strFromEmailAccount]" AuthScopesInvalid="False" Body="[in_strMailBody]" Cc="[in_strMailRecipientCC]" DisplayName="Send HTML Mail- Without attachments" From="[in_strFromEmailAccount]" sap:VirtualizedContainerService.HintSize="434,331" sap2010:WorkflowViewState.IdRef="SendMail_6" Importance="Normal" IsBodyHTML="True" IsDraft="False" Subject="[in_strMailSubject]" To="[in_strMailRecipientTo]">
+                              <umam:SendMail.Attachments>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </umam:SendMail.Attachments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </umam:SendMail>
+                            <ui:LogMessage DisplayName="Log Message- HTML Mail sent without attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;HTML Mail sent without attachments.&quot;]">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:LogMessage>
+                          </Sequence>
+                        </ui:IfElseIfBlock.Then>
+                      </ui:IfElseIfBlock>
+                      <ui:IfElseIfBlock BlockType="ElseIf" Condition="[in_listOfAttachment.count=0 and in_strMailBody.ToLower.Contains(&quot;&lt;br&gt;&quot;)=False]">
+                        <ui:IfElseIfBlock.Then>
+                          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,81" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:LogMessage DisplayName="Log Message- Sending mail without attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;Sending mail without attachments.&quot;]" />
+                            <umam:SendMail AttachmentsCollection="{x:Null}" Bcc="{x:Null}" ContinueOnError="{x:Null}" ReplyTo="{x:Null}" Account="[in_strFromEmailAccount]" AuthScopesInvalid="False" Body="[in_strMailBody]" Cc="[in_strMailRecipientCC]" DisplayName="Send Mail- Without attachments" From="[in_strFromEmailAccount]" sap:VirtualizedContainerService.HintSize="434,331" sap2010:WorkflowViewState.IdRef="SendMail_7" Importance="Normal" IsBodyHTML="False" IsDraft="False" Subject="[in_strMailSubject]" To="[in_strMailRecipientTo]">
+                              <umam:SendMail.Attachments>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </umam:SendMail.Attachments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </umam:SendMail>
+                            <ui:LogMessage DisplayName="Log Message- Mail sent without attachments" sap:VirtualizedContainerService.HintSize="434,141" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;Mail sent without attachments.&quot;]">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:LogMessage>
+                          </Sequence>
+                        </ui:IfElseIfBlock.Then>
+                      </ui:IfElseIfBlock>
+                    </sc:BindingList>
+                  </ui:IfElseIf.ConditionBlocks>
+                </ui:IfElseIf>
+              </ActivityAction>
+            </uma:Office365ApplicationScope.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </uma:Office365ApplicationScope>
+          <ui:LogMessage DisplayName="Log Message- End" sap:VirtualizedContainerService.HintSize="581,141" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;End workflow to Send mail.&quot;]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:LogMessage>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="648,22" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Exception" sap:VirtualizedContainerService.HintSize="450,255.33333333333334" sap2010:WorkflowViewState.IdRef="Sequence_5">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:LogMessage DisplayName="Log Message : failed" sap:VirtualizedContainerService.HintSize="388,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Failed to send mail. Exception Reason: &quot;+exception.Message]" />
+            </Sequence>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+  </Sequence>
+</Activity>

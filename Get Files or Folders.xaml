@@ -1,0 +1,235 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="GetMail" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mg="clr-namespace:Microsoft.Graph;assembly=Microsoft.Graph" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ss="clr-namespace:System.Security;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uma="clr-namespace:UiPath.MicrosoftOffice365.Activities;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umac="clr-namespace:UiPath.MicrosoftOffice365.Activities.Contracts;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umaf="clr-namespace:UiPath.MicrosoftOffice365.Activities.Files;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Tenant ID." Name="in_strTenantIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText=" Name of the asset containing the Application ID." Name="in_strApplicationIDAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used)." Name="in_strApplicationSecretAssetName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="List of Drive Items" Name="out_diResultDriveItems" Type="OutArgument(mg:DriveItem[])" />
+    <x:Property sap2010:Annotation.AnnotationText="URL for Sharepoint site" Name="in_strSharepointURL" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="sub folder path to search the file or folder" Name="in_strSharepointSubfolder" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the file or folder to search" Name="in_strSharepointFileOrFolderNameToSearch" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Boolean to denote if the file or folder was found" Name="out_boolResultFileFolderFound" Type="OutArgument(x:Boolean)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the Orchestrator Folder Path" Name="in_strOrchestratorFolderPath" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:Annotation.AnnotationText>UPTF000004D8eyI8SGVscExpbms+a19fQmFja2luZ0ZpZWxkIjpudWxsLCI8SW5pdGlhbFRvb2x0aXA+a19fQmFja2luZ0ZpZWxkIjoiVGhpcyB3b3JrZmxvdyBVc2VzIHRoZSBNaWNyb3NvZnQgR3JhcGggdG8gcmV0cmlldmUgdGhlIEZpbGVzIGFuZCBGb2xkZXJzIGluIGEgc3BlY2lmaWVkIHNoYXJlcG9pbnQgc2l0ZS5cblxuTGlzdCBvZiBhcmd1bWVudHMgdXNlZDpcblxuaW5fc3RyQXBwbGljYXRpb25TZWNyZXRBc3NldE5hbWUgLSBOYW1lIG9mIHRoZSBhc3NldCBjb250YWluaW5nIHRoZSBBcHBsaWNhdGlvbiBTZWNyZXQgSUQgLSBTZWN1cmUgU3RyaW5nIChQYXNzd29yZCBvZiB0aGUgY3JlZGVudGlhbCBpcyBiZWluZyB1c2VkKS5cbmluX3N0ckFwcGxpY2F0aW9uSURBc3NldE5hbWUtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIEFwcGxpY2F0aW9uIElELlxuaW5fc3RyVGVuYW50SURBc3NldE5hbWUtIE5hbWUgb2YgdGhlIGFzc2V0IGNvbnRhaW5pbmcgdGhlIFRlbmFudCBJRC5cbmluX3N0clNoYXJlcG9pbnRVUkwgLSBVUkwgZm9yIFNoYXJlcG9pbnQgc2l0ZVxuaW5fc3RyU2hhcmVwb2ludFN1YmZvbGRlciAtIHN1YiBmb2xkZXIgcGF0aCB0byBzZWFyY2ggdGhlIGZpbGUgb3IgZm9sZGVyXG5pbl9zdHJTaGFyZXBvaW50RmlsZUZvbGRlclRvU2VhcmNoIC0gTmFtZSBvZiB0aGUgZmlsZSBvciBmb2xkZXIgdG8gc2VhcmNoXG5pbl9zdHJPcmNoZXN0cmF0b3JGb2xkZXJQYXRoIC0gTmFtZSBvZiB0aGUgT3JjaGVzdHJhdG9yIEZvbGRlciBQYXRoXG5cbm91dF9ib29sUmVzdWx0RmlsZUZvbGRlckZvdW5kIC0gQm9vbGVhbiB0byBkZW5vdGUgaWYgdGhlIGZpbGUgb3IgZm9sZGVyIHdhcyBmb3VuZFxub3V0X2RpUmVzdWx0RHJpdmVJdGVtcyAtIExpc3Qgb2YgRHJpdmUgSXRlbXMiLCI8VmVyc2lvbj5rX19CYWNraW5nRmllbGQiOjF9</sap2010:Annotation.AnnotationText>
+  <sap:VirtualizedContainerService.HintSize>871.3333333333334,1358.6666666666667</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>GetMail_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Models</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Models</x:String>
+      <x:String>System.Activities.Runtime.Collections</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Shared.Activities.ConnectionService.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Enums</x:String>
+      <x:String>UiPath.Shared.Activities.Utils</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail.Filters</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Mail.Enums</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Filters</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Contracts</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Files.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Files</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.ViewModels</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>netstandard</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph.Core</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Microsoft.Win32.Primitives</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.Private.Xml</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Linq.Async.Queryable</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Linq.Parallel</AssemblyReference>
+      <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>System.Linq.Queryable</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="This workflow Uses the Microsoft Graph to retrieve the Files and Folders in a specified sharepoint site.&#xA;&#xA;List of arguments used:&#xA;&#xA;in_strApplicationSecretAssetName - Name of the asset containing the Application Secret ID - Secure String (Password of the credential is being used).&#xA;in_strApplicationIDAssetName- Name of the asset containing the Application ID.&#xA;in_strTenantIDAssetName- Name of the asset containing the Tenant ID.&#xA;in_strSharepointURL - URL for Sharepoint site&#xA;in_strSharepointSubfolder - sub folder path to search the file or folder&#xA;in_strSharepointFileFolderToSearch - Name of the file or folder to search&#xA;in_strOrchestratorFolderPath - Name of the Orchestrator Folder Path&#xA;&#xA;out_boolResultFileFolderFound - Boolean to denote if the file or folder was found&#xA;out_diResultDriveItems - List of Drive Items" DisplayName="Get Files or Folder" sap:VirtualizedContainerService.HintSize="496,1294" sap2010:WorkflowViewState.IdRef="Sequence_13">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ss:SecureString" Name="securestrApplicationSecret" />
+      <Variable x:TypeArguments="x:String" Name="strApplicationID" />
+      <Variable x:TypeArguments="x:String" Name="strTenantID" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message- Start Get Files or Folders Workflow" sap:VirtualizedContainerService.HintSize="434,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="[UiPath.Core.Activities.LogLevel.Trace]" Message="[&quot;Start workflow to find file or folder.&quot;]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:LogMessage>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="GetO365Assets.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="434,115.33333333333333" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="GetO365Assets.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationSecretAssetName">[in_strApplicationSecretAssetName]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_TenantIDAssetName">[in_strTenantIDAssetName]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ApplicationID">[strApplicationID]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_ApplicationIDAssetName">[in_strApplicationIDAssetName]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_TenantID">[strTenantID]</OutArgument>
+        <OutArgument x:TypeArguments="ss:SecureString" x:Key="out_SecureApplicationSecret">[securestrApplicationSecret]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_strOrchestratorFolderPath">[in_strOrchestratorFolderPath]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:LogMessage DisplayName="Log Message Retrieved assets for Get Files and folders" sap:VirtualizedContainerService.HintSize="434,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="[UiPath.Core.Activities.LogLevel.Trace]" Message="[&quot;Got assets. Moving to find files and folders.&quot;]" />
+    <TryCatch DisplayName="Try Catch Find Files and folders from a specific directory" sap:VirtualizedContainerService.HintSize="434,195.33333333333334" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <uma:Office365ApplicationScope Account="{x:Null}" ApplicationSecret="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Connector="{x:Null}" ContinueOnError="{x:Null}" OAuth2Username="{x:Null}" Password="{x:Null}" SecurePassword="{x:Null}" Timeout="{x:Null}" Username="{x:Null}" ApplicationId="[strApplicationID]" AuthenticationType="ApplicationIdAndSecret" DisplayName="Microsoft Office 365 Scope - Find Files and folders from a specific directory" Environment="Global" sap:VirtualizedContainerService.HintSize="334,107.33333333333333" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_3" OAuthApplication="UiPath" SecureApplicationSecret="[securestrApplicationSecret]" TenantId="[strTenantID]" UseConnectionService="False">
+          <uma:Office365ApplicationScope.AuthenticationScopes>
+            <scg:List x:TypeArguments="InArgument(x:String)" Capacity="1">
+              <InArgument x:TypeArguments="x:String">https://graph.microsoft.com/.default</InArgument>
+            </scg:List>
+          </uma:Office365ApplicationScope.AuthenticationScopes>
+          <uma:Office365ApplicationScope.Body>
+            <ActivityAction x:TypeArguments="umac:IClientServices">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="umac:IClientServices" Name="ParentScope" />
+              </ActivityAction.Argument>
+              <Sequence sap:VirtualizedContainerService.HintSize="476,295" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <umaf:FindFilesAndFolders ContinueOnError="{x:Null}" DriveMetadata="{x:Null}" First="{x:Null}" AuthScopesInvalid="False" DisplayName="Find Files And Folders from a specific directory" DriveName="Documents" sap:VirtualizedContainerService.HintSize="434,85" sap2010:WorkflowViewState.IdRef="FindFilesAndFolders_2" Query="[in_strSharepointFileOrFolderNameToSearch]" Results="[out_diResultDriveItems]" SiteUrl="[in_strSharepointURL]" Subfolder="[in_strSharepointSubfolder]" />
+                <Assign DisplayName="Assign out_Result_File_Folder_Found" sap:VirtualizedContainerService.HintSize="434,82" sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[out_boolResultFileFolderFound]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">[out_diResultDriveItems.Count&gt;0]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </ActivityAction>
+          </uma:Office365ApplicationScope.Body>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </uma:Office365ApplicationScope>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="400,22" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Assign DisplayName="Assign out_Result_File_Folder_Found catch" sap:VirtualizedContainerService.HintSize="434,85.33333333333333" sap2010:WorkflowViewState.IdRef="Assign_3">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:Boolean">[out_boolResultFileFolderFound]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+              </Assign.Value>
+            </Assign>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <ui:LogMessage DisplayName="Log Message- End Get Files or Folders Workflow" sap:VirtualizedContainerService.HintSize="434,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="[UiPath.Core.Activities.LogLevel.Trace]" Message="[&quot;End workflow to find files or folder.&quot;]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:LogMessage>
+  </Sequence>
+</Activity>
